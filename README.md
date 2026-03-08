@@ -3,9 +3,9 @@ This repository contains a Bilibili dataset sourced from 10 content domains. Giv
 Repository File Description
 ├──  SQL Backup Files
 │   ├── cmt.sql
-│   │   └── Comments table backup: stores main comments made by users on videos
+│   │   └── Comments table backup: stores main comments made by users on videos. This backup is split into 20 parts and stored in the master branch.
 │   ├── subcmt.sql
-│   │   └── Sub-comments table backup: stores replies to main comments
+│   │   └── Sub-comments table backup: stores replies to main comments. This backup is split into 14 parts and stored in the master branch.
 │   ├── videoinfo.sql
 │   │   └── Video information table backup: stores video metadata such as title, intro, play(view count), etc.
 │   └── user.sql
