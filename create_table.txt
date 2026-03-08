@@ -1,0 +1,88 @@
+-- Comment table
+CREATE TABLE cmt (
+    rpid CHAR(24),          -- Comment ID
+    bvid CHAR(12),          -- Video ID
+    mid CHAR(32),           -- Commenter ID
+    uname char(255),        -- Commenter nickname
+    sex char(24),           -- Commenter gender
+    comment TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- Comment content (supports non-ASCII characters including emojis)
+    count INT,              -- Number of direct replies to this comment
+    rcount INT,             -- Seems similar to count, but API returns both fields, reason unknown
+    likes INT,              -- Number of likes for the comment
+    action INT,             -- Number of dislikes for the comment
+    ctime DATETIME,         -- Comment time
+    location char(128),     -- Geographic location
+    flag int,               -- Whether sub-comments have been crawled: 0-not crawled (default when inserted), 1-crawled
+    enc text,               -- English translation of the comment
+    toxic float,               -- General toxic
+    severe_toxic float,               -- Here are the 5 toxicity dimensions
+    obscene float,
+    threat	float,
+    insult float,
+    identity_hate float,
+    PRIMARY KEY (rpid)      -- Primary key
+);
+
+-- Sub-comment table
+CREATE TABLE subcmt (
+    rpid CHAR(24),          -- Comment ID
+    bvid CHAR(12),          -- Video ID
+    root CHAR(24),          -- Root comment ID (the comment whose replies are being crawled)
+    parent CHAR(24),        -- Parent comment ID (the comment being replied to in a sub-comment, used for @mentions)
+    mid CHAR(32),           -- Commenter ID
+    uname char(255),        -- Commenter nickname
+    sex char(24),           -- Commenter gender
+    comment TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- Comment content (supports non-ASCII characters including emojis)
+    likes INT,              -- Number of likes for the comment
+    action INT,             -- Number of dislikes for the comment
+    ctime DATETIME,         -- Comment time
+    location char(128),     -- Geographic location (empty if field not returned by API)
+    enc text,               -- English translation of the comment
+    toxic float,               -- General toxic
+    severe_toxic float,               -- Here are the 5 toxicity dimensions
+    obscene float,
+    threat	float,
+    insult float,
+    identity_hate float,
+    PRIMARY KEY (rpid)      -- Primary key
+);
+
+-- Video information table
+CREATE TABLE videoinfo (    -- Create video information table
+    bvid char(12) PRIMARY KEY, -- Video ID (Bilibili's unique video identifier)
+    aid char(32),           -- Video AV number (av + digits, integer can store up to 10 digits)
+    mid char(32),           -- Uploader ID (access uploader's space at https://space.bilibili.com/mid)
+    title varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- Video title (utf8mb4 supports all Unicode characters including emojis)
+    intro varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- Video description
+    play double,            -- Number of views
+    thumb_up int,           -- Number of likes
+    thumb_down int,         -- Number of dislikes
+    share int,              -- Number of shares/forwards
+    danmaku int,            -- Number of danmaku (bullet comments)
+    collect int,            -- Number of favorites
+    coin int,               -- Number of coins (Bilibili's reward currency)
+    reply int,              -- Number of comments
+    pubtime datetime,       -- Publication time
+    duration int,           -- Video duration in seconds
+    flag int,               -- Whether comments have been crawled: 0-not crawled (default when inserted), 1-crawled
+    writetime TIMESTAMP,     -- Crawl timestamp
+    toxic float,     -- Toxicity computed from comments
+    z float     -- Z-score of video toxicity
+);
+
+-- User table
+CREATE TABLE user (         -- Create user table
+    mid char(32) PRIMARY KEY, -- User ID
+    name char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- Username
+    sex char(32),           -- Gender
+    sign varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- User signature/bio
+    rank int,               -- User rank
+    level int,              -- User level
+    birthday char(32),      -- Birthday
+    school char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- School
+    profession char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, -- Profession
+    following int,          -- Number of users followed
+    follower int,           -- Number of followers
+    view int,               -- Total views
+    likes int               -- Total likes received
+);
